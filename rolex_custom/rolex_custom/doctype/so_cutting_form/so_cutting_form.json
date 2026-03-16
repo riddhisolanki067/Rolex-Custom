@@ -47,10 +47,11 @@
    "fieldtype": "Section Break"
   },
   {
+   "fetch_from": "customer.payment_terms",
    "fieldname": "payment_terms",
    "fieldtype": "Link",
    "label": "Payment Terms",
-   "options": "Payment Term"
+   "options": "Payment Terms Template"
   },
   {
    "fieldname": "section_break_jqhd",
@@ -73,7 +74,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-06 18:49:04.828426",
+ "modified": "2026-03-16 12:58:10.202813",
  "modified_by": "Administrator",
  "module": "Rolex Custom",
  "name": "SO Cutting Form",
