@@ -10,8 +10,9 @@
   "naming_series",
   "column_break_zewh",
   "date",
+  "delivery_date",
   "section_break_nxmo",
-  "table_dfcu",
+  "table_pxch",
   "section_break_lhsq",
   "payment_terms",
   "section_break_jqhd",
@@ -36,11 +37,6 @@
   {
    "fieldname": "section_break_nxmo",
    "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "table_dfcu",
-   "fieldtype": "Table",
-   "options": "SO Cutting Item"
   },
   {
    "fieldname": "section_break_lhsq",
@@ -69,12 +65,22 @@
    "hidden": 1,
    "label": "Naming Series",
    "options": "SC-.YY.-.####"
+  },
+  {
+   "fieldname": "table_pxch",
+   "fieldtype": "Table",
+   "options": "Sales Order Item"
+  },
+  {
+   "fieldname": "delivery_date",
+   "fieldtype": "Date",
+   "label": "Delivery date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-16 12:58:10.202813",
+ "modified": "2026-03-18 14:27:46.651778",
  "modified_by": "Administrator",
  "module": "Rolex Custom",
  "name": "SO Cutting Form",
