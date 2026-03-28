@@ -1666,6 +1666,7 @@
    "label": "Last Scanned Warehouse"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "cutting_status",
    "fieldtype": "Select",
    "label": "Cutting Status",
@@ -1676,7 +1677,7 @@
  "idx": 105,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-05 19:05:11.742983",
+ "modified": "2026-03-28 17:19:26.541743",
  "modified_by": "Administrator",
  "module": "Rolex Custom",
  "name": "Sales Order Cutting",

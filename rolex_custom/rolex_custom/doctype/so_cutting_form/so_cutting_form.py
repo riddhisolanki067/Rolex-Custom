@@ -35,5 +35,6 @@ class SOCuttingForm(Document):
 
 		# Save as Draft
 		new_doc.insert(ignore_permissions=True)
+		new_doc.submit()
 
 	
