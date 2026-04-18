@@ -5,6 +5,9 @@ app_description = "q"
 app_email = "q@gmail.com"
 app_license = "mit"
 
+boot_session = "rolex_custom.ewaybill.ewaybill_override.boot_session"
+
+
 # Apps
 # ------------------
 
