@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:name1",
+ "autoname": "field:badge_id",
  "creation": "2026-04-18 20:18:11.436723",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -10,7 +10,8 @@
   "category",
   "company_name",
   "qr_code",
-  "qr"
+  "qr",
+  "badge_id"
  ],
  "fields": [
   {
@@ -39,12 +40,18 @@
    "fieldname": "qr",
    "fieldtype": "Attach Image",
    "label": "Qr "
+  },
+  {
+   "fieldname": "badge_id",
+   "fieldtype": "Data",
+   "label": "Badge Id",
+   "unique": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-18 20:26:13.524658",
+ "modified": "2026-04-22 19:22:23.873303",
  "modified_by": "Administrator",
  "module": "Rolex Custom",
  "name": "Event Attendee",
