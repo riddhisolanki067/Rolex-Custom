@@ -18,8 +18,7 @@
   {
    "fieldname": "name1",
    "fieldtype": "Data",
-   "label": "Name",
-   "unique": 1
+   "label": "Name"
   },
   {
    "fieldname": "category",
@@ -52,7 +51,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-22 19:54:24.323038",
+ "modified": "2026-04-22 20:02:52.311901",
  "modified_by": "Administrator",
  "module": "Rolex Custom",
  "name": "Event Attendee",
