@@ -3,6 +3,7 @@ from frappe.utils import flt
 from india_compliance.gst_india.utils.e_waybill import EWaybillData
 
 def boot_session(bootinfo):
+    print("Applying custom patch for E-Waybill........................................")
     apply_ewaybill_patch()
 
 def apply_ewaybill_patch():
@@ -13,10 +14,15 @@ def apply_ewaybill_patch():
 
     class CustomStockEntryEWaybillData(EWaybillData):
         def set_transaction_details(self):
+            
+
             super().set_transaction_details()
 
             if self.doc.doctype != "Stock Entry":
                 return
+            default_grand_total = flt(
+                getattr(self.transaction_details, "base_grand_total", None)
+            )   
 
             self.transaction_details.total = flt(self.doc.custom_taxable_value)
             self.transaction_details.total_taxable_value = flt(self.doc.custom_taxable_value)
