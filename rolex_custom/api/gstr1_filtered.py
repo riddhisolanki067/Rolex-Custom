@@ -4,7 +4,7 @@ from india_compliance.gst_india.doctype.gstr_1.gstr_1_export import get_gstr_1_j
 
 # Map of Gov JSON keys to keep — check yours with:
 # python -c "from india_compliance.gst_india.utils.gstr_1 import GovJsonKey; print({k.name: k.value for k in GovJsonKey})"
-ALLOWED_CATEGORIES = {"b2cs", "b2cl", "hsn", "doc_det"}
+ALLOWED_CATEGORIES = {"b2cs", "b2cl", "hsn", "doc_issue"}
 
 
 @frappe.whitelist()
