@@ -1,6 +1,6 @@
 frappe.ui.form.on("Sales Invoice", {
 	refresh(frm) {
-		if (frm.doc.docstatus === 1) {
+		
 			frm.add_custom_button(
 				__("All Copies (1 PDF)"),
 				() => {
@@ -13,6 +13,6 @@ frappe.ui.form.on("Sales Invoice", {
 				},
 				__("Print")
 			);
-		}
+		
 	},
 });
