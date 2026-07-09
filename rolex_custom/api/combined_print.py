@@ -9,7 +9,7 @@ COMBINED_FORMATS = [
 	"Tax Invoice 2nd copy",
 	"Tax Invoice 3rd copy",
 	"Tax Invoice 4th copy",
-	"Job Invoice",
+	
 ]
 
 
