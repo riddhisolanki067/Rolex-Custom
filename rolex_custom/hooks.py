@@ -46,13 +46,18 @@ boot_session = "rolex_custom.ewaybill.ewaybill_override.boot_session"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"GSTR-1" : "public/js/GSTR.js", "Sales Invoice": "public/js/sales_invoice.js"}
+doctype_js = {"GSTR-1" : "public/js/GSTR.js", "Sales Invoice": "public/js/sales_invoice.js", "Subcontracting Receipt": "public/js/subcontracting_receipt.js"}
 
 # Populate GST fields on sales Payment Entries server-side so India Compliance's
 # async client-side fetch can't dirty the form right after Save.
 doc_events = {
 	"Payment Entry": {
 		"validate": "rolex_custom.overrides.payment_entry.set_sales_gst_details",
+	},
+	# Stamp custom_dc_closed on the source Job DC (Stock Entry) for the Job-DC rows
+	# the user ticked on the receipt.
+	"Subcontracting Receipt": {
+		"on_submit": "rolex_custom.overrides.subcontracting_receipt.on_submit",
 	},
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}

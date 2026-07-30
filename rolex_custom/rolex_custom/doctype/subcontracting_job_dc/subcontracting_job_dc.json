@@ -1,0 +1,91 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-07-30 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "job_dc",
+  "posting_date",
+  "subcontracting_order",
+  "supplier",
+  "total_qty",
+  "dc_closed",
+  "dc_closed_on",
+  "pull_batches"
+ ],
+ "fields": [
+  {
+   "fieldname": "job_dc",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Job DC",
+   "options": "Stock Entry",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "DC Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "subcontracting_order",
+   "fieldtype": "Link",
+   "label": "Subcon Order",
+   "options": "Subcontracting Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Subcontractor",
+   "options": "Supplier",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Qty Sent",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "dc_closed",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "DC Closed"
+  },
+  {
+   "depends_on": "eval:doc.dc_closed",
+   "fieldname": "dc_closed_on",
+   "fieldtype": "Date",
+   "label": "Closed On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pull_batches",
+   "fieldtype": "Button",
+   "in_list_view": 1,
+   "label": "Pull Batches → RM"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-07-30 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Rolex Custom",
+ "name": "Subcontracting Job DC",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
