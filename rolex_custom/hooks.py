@@ -46,7 +46,7 @@ boot_session = "rolex_custom.ewaybill.ewaybill_override.boot_session"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"GSTR-1" : "public/js/GSTR.js", "Sales Invoice": "public/js/sales_invoice.js"}
+doctype_js = {"GSTR-1" : "public/js/GSTR.js", "Sales Invoice": "public/js/sales_invoice.js", "Subcontracting Receipt": "public/js/subcontracting_receipt.js"}
 
 # Exclude DC-closed Job DCs from India Compliance's "Fetch Original Document
 # Reference" on Subcontracting Receipt (wraps IC's method, post-filters its result).
@@ -59,6 +59,10 @@ override_whitelisted_methods = {
 doc_events = {
 	"Payment Entry": {
 		"validate": "rolex_custom.overrides.payment_entry.set_sales_gst_details",
+	},
+	# Stamp custom_dc_closed on the source Job DC for ticked reference rows.
+	"Subcontracting Receipt": {
+		"on_submit": "rolex_custom.overrides.subcontracting_receipt.on_submit",
 	},
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}

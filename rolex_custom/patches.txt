@@ -6,3 +6,4 @@
 # Patches added in this section will be executed after doctypes are migrated
 rolex_custom.patches.setup_subcontracting_dc_references
 rolex_custom.patches.restore_ic_subcontracting_receipt_fields
+rolex_custom.patches.add_doc_reference_dc_fields
