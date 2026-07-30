@@ -1,15 +1,14 @@
-"""Subcontracting Job-DC reference feature — custom fields.
+"""Add the DC-Closed flag to the Send-to-Subcontractor Job DC (Stock Entry).
 
-Idempotent (create_custom_fields, update=True), so it is safe on both a fresh
-local site and the live Frappe Cloud site where some of these fields already
-exist (created earlier directly on the instance):
+Idempotent (create_custom_fields, update=True). custom_dc_closed drives the
+Pending Job DC reports and the "exclude closed DCs" filter layered on India
+Compliance's Subcontracting Receipt fetch (see
+rolex_custom.overrides.subcontracting_transaction).
 
-  * Stock Entry.custom_dc_closed / custom_dc_closed_on  — the "DC Closed" flag on
-    the Send-to-Subcontractor Job DC (allow_on_submit; DCs are submitted docs).
-  * Subcontracting Receipt.section_break_ref_doc / fetch_original_doc_ref /
-    doc_references — repurposes the existing "Original Document References" table
-    into the Job-DC table by pointing it at the `Subcontracting Job DC` child
-    DocType (was the generic `Dynamic Link`).
+NOTE: an earlier version of this patch also repurposed IC's Subcontracting
+Receipt doc_references table into a custom Job-DC table — that was wrong (the
+button/table belong to India Compliance). The repurpose is reverted by
+rolex_custom.patches.restore_ic_subcontracting_receipt_fields.
 """
 
 import frappe
@@ -29,8 +28,8 @@ def execute():
 				"depends_on": "eval:doc.purpose=='Send to Subcontractor'",
 				"description": (
 					"Tick when ALL material sent on this Job DC has been received "
-					"back / consumed. Drives the Pending Job DC reports and hides "
-					"the DC from the Subcontracting Receipt fetch."
+					"back / consumed. Drives the Pending Job DC reports and hides the "
+					"DC from the Subcontracting Receipt fetch."
 				),
 			},
 			{
@@ -43,30 +42,6 @@ def execute():
 				"depends_on": "eval:doc.custom_dc_closed",
 			},
 		],
-		"Subcontracting Receipt": [
-			{
-				"fieldname": "section_break_ref_doc",
-				"label": "Job DC References",
-				"fieldtype": "Section Break",
-				"insert_after": "bill_date",
-				"depends_on": "eval:doc.is_return !== 1",
-			},
-			{
-				"fieldname": "fetch_original_doc_ref",
-				"label": "Fetch Job DCs",
-				"fieldtype": "Button",
-				"insert_after": "section_break_ref_doc",
-			},
-			{
-				"fieldname": "doc_references",
-				"label": "Job DC References",
-				"fieldtype": "Table",
-				"options": "Subcontracting Job DC",
-				"insert_after": "fetch_original_doc_ref",
-			},
-		],
 	}
-
 	create_custom_fields(fields, update=True)
 	frappe.clear_cache(doctype="Stock Entry")
-	frappe.clear_cache(doctype="Subcontracting Receipt")
