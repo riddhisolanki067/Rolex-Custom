@@ -104,3 +104,4 @@
 	frappe.router.on("change", () => setTimeout(install, 0));
 	frappe.after_ajax(install);
 })();
+

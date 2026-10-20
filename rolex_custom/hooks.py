@@ -7,6 +7,10 @@ app_license = "mit"
 
 boot_session = "rolex_custom.ewaybill.ewaybill_override.boot_session"
 
+# Resolve the legacy database-defined report before standard report files are
+# synchronized during migrate.
+before_migrate = "rolex_custom.migrate.before_migrate"
+
 
 # Apps
 # ------------------
@@ -29,7 +33,7 @@ boot_session = "rolex_custom.ewaybill.ewaybill_override.boot_session"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/rolex_custom/css/rolex_custom.css"
-app_include_js = "/assets/rolex_custom/js/general_ledger_outstanding.js"
+app_include_js = ["general_ledger_outstanding.bundle.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/rolex_custom/css/rolex_custom.css"
