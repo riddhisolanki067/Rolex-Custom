@@ -29,7 +29,7 @@ boot_session = "rolex_custom.ewaybill.ewaybill_override.boot_session"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/rolex_custom/css/rolex_custom.css"
-# app_include_js = "/assets/rolex_custom/js/rolex_custom.js"
+app_include_js = "/assets/rolex_custom/js/general_ledger_outstanding.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/rolex_custom/css/rolex_custom.css"
