@@ -1,30 +1,33 @@
 import frappe
 
 
-LEGACY_REPORT = "Party Outstanding"
-LEGACY_BACKUP = "Party Outstanding Legacy Backup"
+TALLY_GENERAL_LEDGER = "Tally General Ledger"
+OLD_REPORT = "Party Outstanding"
+NEW_REPORT = "Rolex Party Outstanding"
 
 
-def before_migrate():
-	"""Preserve the old custom report so the app-owned report can be synced."""
-	if not frappe.db.exists("Report", LEGACY_REPORT):
+def after_migrate():
+	"""Point the database-defined Tally ledger at the app-owned Rolex report."""
+	if not frappe.db.exists("Report", TALLY_GENERAL_LEDGER):
 		return
 
-	is_standard = frappe.db.get_value("Report", LEGACY_REPORT, "is_standard")
-	if is_standard != "No":
+	javascript = frappe.db.get_value("Report", TALLY_GENERAL_LEDGER, "javascript") or ""
+	updated = javascript.replace(f'"{OLD_REPORT}"', f'"{NEW_REPORT}"')
+	updated = updated.replace(f"'{OLD_REPORT}'", f"'{NEW_REPORT}'")
+
+	if updated == javascript:
 		return
 
-	if frappe.db.exists("Report", LEGACY_BACKUP):
-		frappe.throw(
-			"Cannot install the standard Party Outstanding report because "
-			f"{LEGACY_BACKUP} already exists."
-		)
-
-	frappe.rename_doc(
+	frappe.db.set_value(
 		"Report",
-		LEGACY_REPORT,
-		LEGACY_BACKUP,
-		force=True,
-		ignore_permissions=True,
-		show_alert=False,
+		TALLY_GENERAL_LEDGER,
+		"javascript",
+		updated,
+		update_modified=False,
+	)
+	frappe.logger("rolex_custom").info(
+		"Updated %s routing from %s to %s",
+		TALLY_GENERAL_LEDGER,
+		OLD_REPORT,
+		NEW_REPORT,
 	)

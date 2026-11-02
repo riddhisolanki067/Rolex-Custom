@@ -33,15 +33,13 @@
 			account: report.get_filter_value("account"),
 			to_date: report.get_filter_value("to_date"),
 		};
-		const accounts = as_list(filters.account);
 		const parties = as_list(filters.party);
 
 		return {
 			company: filters.company,
 			party_type: filters.party_type,
 			party: parties.length === 1 ? parties[0] : null,
-			party_account: accounts.length === 1 ? accounts[0] : null,
-			as_on_date: filters.to_date,
+			report_date: filters.to_date,
 		};
 	}
 
@@ -50,8 +48,7 @@
 			context.company &&
 				ALLOWED_PARTY_TYPES.has(context.party_type) &&
 				context.party &&
-				context.party_account &&
-				context.as_on_date
+				context.report_date
 		);
 	}
 
@@ -69,7 +66,7 @@
 		if (!is_eligible(context)) return;
 
 		report.page.add_inner_button(BUTTON_LABEL, () => {
-			frappe.set_route("query-report", "Party Outstanding", context);
+			frappe.set_route("query-report", "Rolex Party Outstanding", context);
 		});
 	}
 

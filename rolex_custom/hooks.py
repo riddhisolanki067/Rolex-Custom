@@ -7,10 +7,9 @@ app_license = "mit"
 
 boot_session = "rolex_custom.ewaybill.ewaybill_override.boot_session"
 
-# Resolve the legacy database-defined report before standard report files are
-# synchronized during migrate.
-before_migrate = "rolex_custom.migrate.before_migrate"
-
+# Keep the database-defined Tally ledger routed to the uniquely named,
+# app-owned outstanding report. The update is idempotent.
+after_migrate = "rolex_custom.migrate.after_migrate"
 
 # Apps
 # ------------------
