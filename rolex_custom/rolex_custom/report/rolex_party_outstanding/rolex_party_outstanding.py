@@ -6,7 +6,7 @@ from frappe import _
 
 # ERPNext / Frappe v16 Script Report
 # Report Name: Rolex Party Outstanding
-# VERSION: 11-supplier-net-before-tds
+# VERSION: 12-include-unallocated-advances-in-summary
 def execute(filters=None):
 	return _run(frappe._dict(filters or {}))
 
@@ -319,6 +319,10 @@ def _run(filters):
 		voucher_type = row.get("voucher_type") or default_voucher_type
 		# This report presents outstanding invoices only, not unallocated advances.
 		if voucher_type != default_voucher_type:
+			# Keep the table invoice-only, but include unallocated Payment Entry /
+			# Journal Entry credits in the Customer/Supplier Advances summary.
+			if is_advance:
+				total_advances = total_advances + (-pending)
 			continue
 		display_no = our_voucher
 		doc = doc_map.get(our_voucher)
