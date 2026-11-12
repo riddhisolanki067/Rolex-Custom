@@ -502,13 +502,15 @@ def _run(filters):
 	# SUMMARY
 	# ---------------------------------------------------------
 	advance_label = _("Customer Advances")
+	pending_label = _("Receivable")
 	if party_type == "Supplier":
 		advance_label = _("Supplier Advances")
+		pending_label = _("Payable")
 	summary = [
 		{"value": total_invoice, "label": _("Total Invoice Amount"), "datatype": "Currency", "currency": company_currency},
 		{
 			"value": frappe.utils.flt(total_pending),
-			"label": _("Total Pending"),
+			"label": pending_label,
 			"datatype": "Currency",
 		},
 		{
