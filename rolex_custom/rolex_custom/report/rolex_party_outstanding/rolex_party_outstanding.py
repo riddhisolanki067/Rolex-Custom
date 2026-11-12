@@ -515,6 +515,7 @@ def _run(filters):
 			"value": frappe.utils.flt(total_advances),
 			"label": advance_label,
 			"datatype": "Currency",
+			"indicator": "Red",
 		},
 	]
 	return [
