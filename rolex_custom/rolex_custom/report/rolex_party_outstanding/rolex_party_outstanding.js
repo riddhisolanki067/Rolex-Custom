@@ -154,7 +154,6 @@ frappe.query_reports["Rolex Party Outstanding"] = {
                     <div class="bank-title">${__("Bank Details")}</div>
                     <div><b>${__("Bank")}:</b> Axis Bank Ltd</div>
                     <div><b>${__("Account No.")}:</b> 923030012699608 &nbsp; | &nbsp; <b>${__("IFSC")}:</b> UITB0000129</div>
-                    <div><b>${__("Account Type")}:</b> BANK OD A/C</div>
                 </div>
 
                 <div class="regards">Regards,<br><b>Rolex India</b></div>
