@@ -40,6 +40,125 @@ frappe.query_reports["Rolex Party Outstanding"] = {
             if (report_date && frappe.datetime.get_diff(report_date, data.due_date) > 0) return '<span style="color:#c0392b;font-weight:600">' + value + '</span>';
         }
         return value;
+    },
+
+    get_pdf_format: async function (report) {
+        const esc = value => frappe.utils.escape_html(String(value == null ? "" : value));
+        const filters = report.get_filter_values ? report.get_filter_values() : {};
+        const party_type = filters.party_type || "Customer";
+        const selected_party = filters.party || "";
+        const currency = "INR";
+        const money = value => format_currency(flt(value), currency);
+        const date = value => value ? frappe.datetime.str_to_user(value) : "";
+        const rows = (report.data || []).filter(row => row && !row.is_total_row && row.invoice_no);
+        const show_party = !selected_party;
+
+        let total_invoice = 0;
+        let total_pending = 0;
+        rows.forEach(row => {
+            total_invoice += flt(row.invoice_amount);
+            total_pending += flt(row.pending_amount);
+        });
+
+        const summary = (report.raw_data && report.raw_data.report_summary) || [];
+        const advance_summary = summary.find(item => /Advances/i.test(item.label || ""));
+        const advances = advance_summary ? flt(advance_summary.value) : 0;
+        const pending_label = party_type === "Supplier" ? __("Payable") : __("Receivable");
+        const advance_label = party_type === "Supplier" ? __("Supplier Advances") : __("Customer Advances");
+
+        const party_heading = selected_party
+            ? `<div><b>${esc(party_type)}:</b> ${esc(selected_party)}</div>`
+            : `<div><b>${esc(party_type)}:</b> ${__("All")}</div>`;
+
+        const body_rows = rows.length ? rows.map((row, index) => `
+            <tr>
+                <td class="center">${index + 1}</td>
+                ${show_party ? `<td>${esc(row.party)}</td>` : ""}
+                <td class="nowrap">${esc(date(row.invoice_date))}</td>
+                <td>${esc(row.invoice_no)}</td>
+                <td class="amount">${esc(money(row.invoice_amount))}</td>
+                <td class="amount">${esc(money(row.pending_amount))}</td>
+                <td class="nowrap">${esc(date(row.due_date))}</td>
+            </tr>`).join("") : `
+            <tr><td colspan="${show_party ? 7 : 6}" class="center muted">${__("No outstanding invoices for the selected filters.")}</td></tr>`;
+
+        return `
+            <style>
+                .rolex-outstanding-print { font-family: Arial, sans-serif; color: #111; font-size: 10.5pt; }
+                .rolex-outstanding-print .company { text-align: center; border-bottom: 2px solid #222; padding-bottom: 8px; }
+                .rolex-outstanding-print .company h1 { font-size: 20pt; margin: 0 0 4px; letter-spacing: .3px; }
+                .rolex-outstanding-print .company p { margin: 2px 0; line-height: 1.35; }
+                .rolex-outstanding-print .title { text-align: center; font-size: 14pt; font-weight: 700; margin: 14px 0 10px; }
+                .rolex-outstanding-print .context { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 10px; line-height: 1.5; }
+                .rolex-outstanding-print .summary { width: 100%; margin: 8px 0 12px; border-collapse: collapse; }
+                .rolex-outstanding-print .summary td { width: 33.33%; border: 1px solid #bbb; padding: 7px 9px; text-align: center; }
+                .rolex-outstanding-print .summary .label { font-size: 9pt; color: #555; }
+                .rolex-outstanding-print .summary .value { font-size: 11pt; font-weight: 700; margin-top: 3px; }
+                .rolex-outstanding-print .details { width: 100%; border-collapse: collapse; }
+                .rolex-outstanding-print .details thead { display: table-header-group; }
+                .rolex-outstanding-print .details th { background: #ececec; border: 1px solid #999; padding: 6px 7px; font-weight: 700; }
+                .rolex-outstanding-print .details td { border: 1px solid #bbb; padding: 6px 7px; vertical-align: top; }
+                .rolex-outstanding-print .amount { text-align: right; white-space: nowrap; }
+                .rolex-outstanding-print .center { text-align: center; }
+                .rolex-outstanding-print .nowrap { white-space: nowrap; }
+                .rolex-outstanding-print .muted { color: #666; }
+                .rolex-outstanding-print .total-row td { border-top: 2px solid #333; font-weight: 700; }
+                .rolex-outstanding-print .bank { margin-top: 16px; border: 1px solid #999; padding: 9px 11px; page-break-inside: avoid; }
+                .rolex-outstanding-print .bank-title { font-weight: 700; margin-bottom: 5px; }
+                .rolex-outstanding-print .regards { margin-top: 22px; line-height: 1.5; page-break-inside: avoid; }
+                @page { size: A4 portrait; margin: 12mm; }
+            </style>
+            <div class="rolex-outstanding-print">
+                <div class="company">
+                    <h1>Rolex India</h1>
+                    <p>Plot No. 182 (P) and 183 (P), SY. 208, Gamanagatti 2nd Stage Industrial Area,<br>Village Gamanagatti, Hubballi - 580025, Karnataka, India</p>
+                    <p><b>Email:</b> rolexindiahbl@gmail.com &nbsp; | &nbsp; <b>GSTIN:</b> 29ABFFR5985B1ZU</p>
+                </div>
+
+                <div class="title">${__("Party Outstanding Statement")}</div>
+                <div class="context">
+                    <div>${party_heading}<div><b>${__("Company")}:</b> ${esc(filters.company || "Rolex India")}</div></div>
+                    <div style="text-align:right"><b>${__("As On Date")}:</b> ${esc(date(filters.report_date))}<br><b>${__("Overdue Only")}:</b> ${filters.overdue_only ? __("Yes") : __("No")}</div>
+                </div>
+
+                <table class="summary">
+                    <tr>
+                        <td><div class="label">${__("Total Invoice Amount")}</div><div class="value">${esc(money(total_invoice))}</div></td>
+                        <td><div class="label">${pending_label}</div><div class="value">${esc(money(total_pending))}</div></td>
+                        <td><div class="label">${advance_label}</div><div class="value">${esc(money(advances))}</div></td>
+                    </tr>
+                </table>
+
+                <table class="details">
+                    <thead><tr>
+                        <th style="width:5%">#</th>
+                        ${show_party ? `<th>${__("Party")}</th>` : ""}
+                        <th>${__("Date")}</th>
+                        <th>${__("Voucher No.")}</th>
+                        <th class="amount">${__("Invoice Amount")}</th>
+                        <th class="amount">${__("Pending Amount")}</th>
+                        <th>${__("Due Date")}</th>
+                    </tr></thead>
+                    <tbody>
+                        ${body_rows}
+                        <tr class="total-row">
+                            <td colspan="${show_party ? 4 : 3}" class="amount">${__("Total")}</td>
+                            <td class="amount">${esc(money(total_invoice))}</td>
+                            <td class="amount">${esc(money(total_pending))}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="bank">
+                    <div class="bank-title">${__("Bank Details")}</div>
+                    <div><b>${__("Bank")}:</b> Axis Bank Ltd</div>
+                    <div><b>${__("Account No.")}:</b> 923030012699608 &nbsp; | &nbsp; <b>${__("IFSC")}:</b> UITB0000129</div>
+                    <div><b>${__("Account Type")}:</b> BANK OD A/C</div>
+                </div>
+
+                <div class="regards">Regards,<br><b>Rolex India</b></div>
+            </div>`;
     }
 };
 
